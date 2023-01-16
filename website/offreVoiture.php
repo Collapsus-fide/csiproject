@@ -112,7 +112,7 @@ HTML
 HTML
         );
     }
-}else{
+}elseif(Compte::isConnected()){
     $page->appendContent(<<<HTML
     <p>Envoyer une proposition d'achat</p>
 <form name="proposition" method="post" action="proposition.php">

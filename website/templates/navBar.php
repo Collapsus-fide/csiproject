@@ -15,10 +15,24 @@ JS
 );
 
 $page->appendContent(<<<HTML
-<!-- Navbar-->
-<header class="header">
+    <header class="header">
     <nav class="navbar navbar-expand-lg fixed-top py-3">
-        <div class="container"><a href="#" class="navbar-brand text-uppercase font-weight-bold">Transparent Nav</a>
+    HTML
+);
+if ($type){
+    $page->appendContent(<<<HTML
+        <div class="container"><a href="#" class="navbar-brand text-uppercase font-weight-bold">sell your cars</a>
+
+HTML
+    );
+}else{
+    $page->appendContent(<<<HTML
+        <div class="container"><a href="#" class="navbar-brand text-uppercase font-weight-bold">buy cars</a>
+
+HTML
+    );
+}
+$page->appendContent(<<<HTML
             <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"><i class="fa fa-bars"></i></button>
             
             <div id="navbarSupportedContent" class="collapse navbar-collapse">
@@ -45,6 +59,7 @@ $page->appendContent(<<<HTML
         </div>
     </nav>
 </header>
+<div style="margin-top: 100px"></div>
 HTML
 );
 
