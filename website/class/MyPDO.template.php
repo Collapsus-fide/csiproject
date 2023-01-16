@@ -4,7 +4,7 @@
 /* Exemple de configuration et d'utilisation*/
 require_once 'MyPDO.class.php';
 
-MyPDO::setConfiguration('pgsql:host=localhost;dbname=si;', 'postgres', 'Ssov*1912');
+MyPDO::setConfiguration('pgsql:host=localhost;dbname=mydatabase;', 'postgres', 'Ssov*1912');
 /*
 $stmt = MyPDO::getInstance()->prepare(<<<SQL
     SELECT id, name

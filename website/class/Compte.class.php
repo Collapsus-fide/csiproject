@@ -1,11 +1,6 @@
 <?php
 
-if (file_exists('../autoload.include.php')) {
-    require_once('../autoload.include.php');
-}else if(file_exists('autoload.include.php')){
-    require_once('autoload.include.php');
-}
-
+require_once ('Session.class.php');
 require_once('MyPDO.template.php') ;
 
 class AuthenticationException extends Exception { }
@@ -15,12 +10,12 @@ class NotInSessionException extends Exception { }
 /**
 * Class Utilisateur liant la Platform à la BD.
 */
-class Compte extends Entity {
+class Compte {
     /**
      * Identifiant unique du User dans la base de données
-     * @var string $id
+     * @var string $idcompte
      */
-    public $idCompte = null ;
+    public ?int $idcompte = null ;
 
     /**
      * Nom
@@ -64,8 +59,8 @@ class Compte extends Entity {
         // voir createFromSession ou createFromAuth512
     }
     
-    protected static function getAll() : array{
-        return void;
+    protected static function getAll(){
+        return null;
     }
     
     public function persist(): bool{
@@ -86,7 +81,7 @@ class Compte extends Entity {
     <div><span>E-mail   </span> : <span>{$this->mail}    </span></div>
     <div><span>Date de naissance</span> : <span>{$this->dateNaissance}    </span></div>*/
            return null;
-HTML;
+
     }
 
     /**
@@ -125,7 +120,7 @@ HTML;
 
                     <div class="fh5co-cards">
                         <a class="float-center" href="/login/forgot_password.php">Mot de passe oublié ?</a>
-                        <a class="float-center" href="inscription.php">Pas encore inscrit ?</a>
+                        <a class="float-center" href="inscriptionClient.php">Pas encore inscrit ?</a>
                     </div>
                     
                     <button type="submit" class="btn btn-primary input-form" id="loginbtn">Connexion</button>
@@ -153,9 +148,9 @@ HTML;
         // Préparation de la requête
          $stmt = myPDO::getInstance()->prepare(<<<SQL
     SELECT *
-    FROM client
-    WHERE mail    = :login
-    AND   sha512pass = :pass
+    FROM compte
+    WHERE nomutilisateur    = :login
+    AND   motdepasse = :pass
 SQL
     ) ;
 
@@ -308,7 +303,7 @@ function crypter(f, challenge) {
 
                     <div class="fh5co-cards">
                         <a class="float-center" href="/login/forgot_password.php">Mot de passe oublié ?</a>
-                        <a class="float-center" href="inscription.php">Pas encore inscrit ?</a>
+                        <a class="float-center" href="inscriptionClient.php">Pas encore inscrit ?</a>
                     </div>
                     
                     <button type="submit" class="btn btn-primary input-form" id="loginbtn">Connexion</button>
@@ -326,7 +321,7 @@ HTML;
      * Fonction de validation du couple Login/mot de passe.
      * @param array $data 
      *
-     * @return User utilisateur authentifié
+     * @return Compte utilisateur authentifié
      */
     public static function createFromAuthSHA512(array $data)
     {
@@ -340,8 +335,8 @@ HTML;
         $stmt = MyPDO::getInstance();
         $stmt = $stmt->prepare(<<<SQL
     SELECT *
-    FROM client
-    WHERE SHA2(CONCAT(sha512pass, :challenge, SHA2(client.mail, 512)), 512) = :code;
+    FROM compte
+    WHERE SHA512(CONCAT(motdepasse, :challenge, SHA512(Compte.nomutilisateur))) = :code;
 SQL
     ) ;
 
@@ -360,97 +355,46 @@ SQL
         }
     }
 
-    public static function SignUpForm(String $action){
-        $p = new WebPage("inscription");
-        include "templates/imports.php";
-        $p->appendCssUrl("css/inscription.css");
-        $p->appendContent(<<<HTML
-    <!--
-    Author: Colorlib
-Author URL: https://colorlib.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
-<!DOCTYPE html>
-<html>
-<head>
-<title>Creative Colorlib SignUp Form</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<!-- Custom Theme files -->
-<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
-<!-- //Custom Theme files -->
-<!-- web font -->
-<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
-<!-- //web font -->
-</head>
-<body>
-	<!-- main -->
-	<div class="main-w3layouts wrapper">
-		<h1>Creative SignUp Form</h1>
-		<div class="main-agileinfo">
-			<div class="agileits-top">
-				<form action="signUpRequest.php" method="post">
-					<input class="text" type="text" name="Nom" placeholder="Nom" required="">
-					<input class="text" type="text" name="Prenom" placeholder="Prenom" required="">
-					<input class="text email" type="email" name="mail" placeholder="Email" required="">
-					<input class="text" type="password" name="password" placeholder="Password" required="">
-					<input class="text w3lpass" type="password" name="password" placeholder="Confirm Password" required="">
-					<div class="wthree-text">
-						<label class="anim">
-							<input type="checkbox" class="checkbox" required="">
-							<span>I Agree To The Terms & Conditions</span>
-						</label>
-						<div class="clear"> </div>
-					</div>
-					<input type="submit" value="SIGNUP">
-				</form>
-				<p>Already have an Account? <a href="connexion.php"> Login Now!</a></p>
-			</div>
-		</div>
-		<!-- copyright -->
-		<div class="colorlibcopy-agile">
-			<p>© 2018 Colorlib Signup Form. All rights reserved | Design by <a href="https://colorlib.com/" target="_blank">Colorlib</a></p>
-		</div>
-		<!-- //copyright -->
-		<ul class="colorlib-bubbles">
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul>
-	</div>
-	<!-- //main -->
-</body>
-</html>
 
-HTML
-        );
-
-        return $p->toHTML();
-
-
-    }
-public static function signUpRequest(array $data){
+public static function signUpRequestClient($username, $mdp, $email, $tel, $adresse, $prenom,$nom){
     $stmt = MyPDO::getInstance();
     $stmt = $stmt->prepare(<<<SQL
-insert into client(mail,sha512Pass,nom,prenom, points_fidelite,nb_commande_oubliée) VALUES (:mail,:pass,:nom,:prenom,0,0);
+insert into compte(nomutilisateur,motdepasse,email,adresse,tel) VALUES (:nomUtil,:pass,:mail,:adresse,:tel);
 SQL
     ) ;
 
     $stmt->execute(array(
-        ':nom' => $_REQUEST['Nom'],
-        ':prenom' => $_REQUEST['Prenom'],
-        ':mail' => $_REQUEST['mail'],
-        ':pass'  => $_REQUEST['password'])) ;
+        ':username' => $username,
+        ':adresse' => $mdp,
+        ':tel' => $tel,
+        ':mail' => $email,
+        ':pass'  => $adresse,
+         ':prenom' => $prenom,
+        ':nom' => $nom)) ;
 }
+public function isGarage(){
+    $stmt = MyPDO::getInstance();
+    $stmt = $stmt->prepare(<<<SQL
+SELECT nomgarage from garage where idcompte = :id
+SQL
+    );
+
+
+    $stmt->setFetchMode(PDO::FETCH_CLASS, __CLASS__) ;
+    $stmt->execute(array(
+        ':id' => $this->idcompte)) ;
+
+    $res=$stmt->fetch();
+    if ($res == false) {
+        return false ;
+    }
+    else {
+        return true;
+    }
+}
+
+
+
 }
 
 

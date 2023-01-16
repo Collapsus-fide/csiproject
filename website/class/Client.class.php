@@ -1,7 +1,7 @@
 <?php
 
 
-class Client extends User
+class Client extends Compte
 {
     /**
      * Prénom
@@ -18,6 +18,11 @@ class Client extends User
      */
     public function firstName() : string {
         return $this->firstName ;
+    }
+
+    public function isGarage()
+    {
+        return false;
     }
 }
 
