@@ -25,8 +25,10 @@ if ($type){
         <th scope="col">Transmission</th>
         <th scope="col">Mileage</th>
         <th scope="col">Fuel Type</th>
+        <th scope="col">Estimated Price</th>
         <th scope="col">Category</th>
         <th scope="col">status</th>
+        
         <th scope="col"></th>
     </tr>
   </thead>
@@ -44,6 +46,7 @@ HTML
       <td>{$offre->getTypeTransmission()}</td>
       <td>{$offre->getMileageVehicule()}</td>
       <td>{$offre->getTypeCarburant()}</td>
+      <td>{$offre->getPrixPredit()}</td>
       <td>{$offre->getCategorie()}</td>
        <td>{$offre->getStatus()}</td>
       <td><form action="offreVoiture.php" method="post">

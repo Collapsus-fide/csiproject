@@ -4,7 +4,7 @@ declare(strict_types=1);
 include_once "class/Compte.class.php";
 include_once "class/Webpage.class.php";
 $page = new WebPage('CSI');
-
+$page->appendCssUrl("css/style.css");
 $connected = false;
 if (Compte::isConnected()) {
     $connected = true;
