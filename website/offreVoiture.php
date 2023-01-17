@@ -5,7 +5,7 @@ include_once "class/PropositionAchat.class.php";
 
 
 $id = $_POST['id'];
-$offre = OffreVoiture::createFromId($id);
+$offre = OffreVoiture::createFromImmat($id);
 $page->appendContent(<<<HTML
 <table>
   <thead>

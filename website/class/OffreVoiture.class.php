@@ -4,9 +4,7 @@
 
 class OffreVoiture
 {
-    protected int $id;
-
-
+    private int $idoffrevoiture;
     protected string $immatriculation;
     protected string $dateDepot;
     protected ?string $dateDeVente;
@@ -15,6 +13,15 @@ class OffreVoiture
     protected string $commentairePrix;
     public string $status;
     public string $categorie;
+
+    /**
+     * @return int
+     */
+    public function getIdoffrevoiture(): int
+    {
+        return $this->idoffrevoiture;
+    }
+
 
     /**
      * @return string
@@ -56,14 +63,6 @@ class OffreVoiture
     public function setIdgarage(int $idgarage): void
     {
         $this->idgarage = $idgarage;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
     }
 
     /**
@@ -373,12 +372,27 @@ class OffreVoiture
     protected int $autonomie;
     protected $tailleMoteur;
 
-    public static function createFromId( $id)
+    public static function createFromImmat($id) : self
     {
         $stmt = myPDO::getInstance()->prepare(<<<SQL
     SELECT *
     FROM offrevoiture
     WHERE immatriculation = :id
+SQL
+        );
+
+        $stmt->execute([$id]);
+        // Fetch des valeurs retournées.
+        $stmt->setFetchMode(PDO::FETCH_CLASS, __CLASS__);
+        return $stmt->fetch();
+    }
+
+    public static function createFromId($id) : self
+    {
+        $stmt = myPDO::getInstance()->prepare(<<<SQL
+    SELECT *
+    FROM offrevoiture
+    WHERE idoffrevoiture = :id
 SQL
         );
 
@@ -413,13 +427,15 @@ SQL
         ];
         $stmt = MyPDO::getInstance()->prepare(<<<SQL
         DELETE FROM OffreVoiture
-        WHERE immatriculation = :id;
+        WHERE idoffrevoiture = :id;
         
 SQL
         );
 
         $stmt->execute($data);
     }
+
+
 
     public static function getOffresByIdGarage($id)
     {
@@ -467,10 +483,11 @@ SQL
         $stmt->execute($data);
 
     }
+
     public static function getOffresDispo(){
         $stmt = MyPDO::getInstance()->prepare(<<<SQL
-            SELECT immatriculation,"dateDepot","marqueVehicule","modelVehicule","anneeVehicule","typeCarburant","typeTransmission","mileageVehicule",autonomie,"tailleMoteur","prixVente",categorie
-            FROM OffreVoiture 
+            SELECT idoffrevoiture,immatriculation,"dateDepot","marqueVehicule","modelVehicule","anneeVehicule","typeCarburant","typeTransmission","mileageVehicule",autonomie,"tailleMoteur","prixVente",categorie
+            FROM OffreVoiture
             Where status = 'disponible'
 SQL
         );
