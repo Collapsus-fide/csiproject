@@ -9,7 +9,7 @@ $page->appendContent(<<<HTML
         <th colspan="4">car offers</th>
     </tr>
     <tr>
-        <th scope="col">Mise en vente</th>
+        <th scope="col">date</th>
         <th scope="col">Price</th>
         <th scope="col">Brand</th>
         <th scope="col">Model</th>
@@ -38,7 +38,7 @@ foreach ($offres as $offre){
       <td>{$offre->getCategorie()}</td>
       <td><form action="offreVoiture.php" method="post">
       <input type="hidden" name="id" id="id" value="{$offre->getImmatriculation()}">
-    <input class="btn" type="submit" name="upvote" value="Voir" />
+    <input class="btn" type="submit" name="upvote" value="view" />
 </form>
 </td>
 

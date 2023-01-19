@@ -3,7 +3,7 @@ include_once "templates/imports.php";
 include_once "class/OffreVoiture.class.php";
 if($type) {
     if(isset($_POST["prediction"])) {
-        $prixPredit = OffreVoiture::definirPrix($_POST["immatriculation"], $_POST["marque"], $_POST["model"], $_POST["annee"], $_POST["transmission"], $_POST["mileage"], $_POST["carburant"], $_POST["taxe"], $_POST["autonomie"], $_POST["tailleMoteur"]);
+        $prixPredit = OffreVoiture::definirPrix($_POST["immatriculation"], $_POST["marque"], $_POST["model"], $_POST["annee"], $_POST["transmission"], intval($_POST["mileage"]), $_POST["carburant"], $_POST["taxe"], $_POST["autonomie"], $_POST["tailleMoteur"]);
         $page->appendContent(<<<HTML
         <form action="creerOffre.php" method="post" name="nouvelleOffre" style="margin-top: 100px" >
         <input type="hidden" name="immatriculation" value="{$_POST["immatriculation"]}">
@@ -20,14 +20,21 @@ if($type) {
         <input type="hidden" name="prixPredit" value="{$prixPredit}">
         <input type="hidden" name="idGarage" value="{$user->idcompte}">
 
-
-        <input type="number" name="prixVente" value="{$prixPredit}">
+<label>
+prix de vente
+ <input type="number" name="prixVente" value="{$prixPredit}">
+</label>
+<label>
+commentaire
+ <input type="text" name="commentaire" value="{$prixPredit}">
+</label>
+       
         <input class="btn btn-primary"type="submit" name="creerOffre" value="deposer offre">
 </form>
 HTML
         );
     }elseif(isset($_POST["creerOffre"])){
-        OffreVoiture::addOffre($_POST["immatriculation"], $_POST["prixVente"],$_POST["marque"], $_POST["model"], $_POST["annee"], $_POST["transmission"], $_POST["mileage"], $_POST["carburant"], $_POST["taxe"], $_POST["autonomie"], $_POST["tailleMoteur"],$_POST["prixPredit"],$_POST["idGarage"] );
+        OffreVoiture::addOffre($_POST["immatriculation"], $_POST["prixVente"],$_POST["marque"], $_POST["model"], $_POST["annee"], $_POST["transmission"], $_POST["mileage"], $_POST["carburant"], $_POST["taxe"], $_POST["autonomie"], $_POST["tailleMoteur"],$_POST["prixPredit"],$_POST["idGarage"],$_POST["commentaire"] );
     }else {
         $page->appendContent(<<<HTML
 

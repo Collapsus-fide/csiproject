@@ -13,6 +13,38 @@ class OffreVoiture
     protected string $commentairePrix;
     public string $status;
     public string $categorie;
+    protected $taxe;
+    protected int $autonomie;
+    protected int $tailleMoteur;
+    protected string $imageV;
+    protected string $dateExpiration;
+    protected string $marqueVehicule;
+    protected string $modelVehicule;
+    protected int $anneeVehicule;
+    protected ?float $prixFinal;
+    protected string $typeTransmission;
+    protected int $mileageVehicule;
+    protected string $typeCarburant;
+    protected int $idgarage;
+
+    public static function modifier($id, $commentaire, $mileage,$prix)
+    {
+        $data = [
+            ':id' => $id,
+            ':mileage' => $mileage,
+            ':prix' => $prix,
+            ':commentaire'=> $commentaire
+        ];
+        $stmt = MyPDO::getInstance()->prepare(<<<SQL
+        update OffreVoiture set "commentairePrix" = :commentaire, "mileageVehicule" = :mileage, "prixVente" = :prix
+        WHERE idoffrevoiture = :id;
+
+        
+SQL
+        );
+
+        $stmt->execute($data);
+    }
 
     /**
      * @return int
@@ -38,16 +70,6 @@ class OffreVoiture
     {
         $this->categorie = $categorie;
     }
-    protected string $imageV;
-    protected string $dateExpiration;
-    protected string $marqueVehicule;
-    protected string $modelVehicule;
-    protected int $anneeVehicule;
-    protected ?float $prixFinal;
-    protected string $typeTransmission;
-    protected int $mileageVehicule;
-    protected string $typeCarburant;
-    protected int $idgarage;
 
     /**
      * @return int
@@ -368,9 +390,7 @@ class OffreVoiture
         $this->tailleMoteur = $tailleMoteur;
     }
 
-    protected $taxe;
-    protected int $autonomie;
-    protected $tailleMoteur;
+
 
     public static function createFromImmat($id) : self
     {
@@ -454,7 +474,7 @@ SQL
         return $stmt->fetchAll();
     }
 
-    public static function addOffre(string $immatriculation, float $prixVente, string $marqueVehicule, string $modeleVehicule, string $anneeVehicule, string $typeTransmission, int $mileageVehicule, string $typeCarburant, $taxe, int $autonomie, $tailleMoteur, $prixPredit, $idGarage)
+    public static function addOffre(string $immatriculation, float $prixVente, string $marqueVehicule, string $modeleVehicule, string $anneeVehicule, string $typeTransmission, int $mileageVehicule, string $typeCarburant, $taxe, int $autonomie, $tailleMoteur, $prixPredit, $idGarage,$commentaire)
     {
 
         //todo appel ia pour categ
@@ -473,11 +493,12 @@ SQL
             ':tailleMoteur' => $tailleMoteur,
             ':prixPredit' => $prixPredit,
             ':idGarage' => $idGarage,
-            ':categ' => $categ
+            ':categ' => $categ,
+            ':commentaire'=> $commentaire
 
         ];
         $stmt = MyPDO::getInstance()->prepare(<<<SQL
-INSERT INTO offrevoiture (immatriculation,"prixVente","marqueVehicule","modelVehicule","anneeVehicule","typeTransmission","mileageVehicule","typeCarburant",taxe,autonomie,"tailleMoteur", "prixPredit",idgarage,categorie)VALUES (:immatriculation,:prixVente,:marqueVehicule,:modeleVehicule,:anneeVehicule,:typeTransmission,:mileageVehicule,:typeCarburant,:taxe,:autonomie,:tailleMoteur, :prixPredit, :idGarage, :categ);
+INSERT INTO offrevoiture (immatriculation,"prixVente","marqueVehicule","modelVehicule","anneeVehicule","typeTransmission","mileageVehicule","typeCarburant",taxe,autonomie,"tailleMoteur", "prixPredit",idgarage,categorie, "commentairePrix")VALUES (:immatriculation,:prixVente,:marqueVehicule,:modeleVehicule,:anneeVehicule,:typeTransmission,:mileageVehicule,:typeCarburant,:taxe,:autonomie,:tailleMoteur, :prixPredit, :idGarage, :categ,:commentaire);
 SQL
         );
         $stmt->execute($data);

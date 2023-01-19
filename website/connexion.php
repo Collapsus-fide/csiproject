@@ -39,14 +39,13 @@ CSS
                     
                     <div class="form-group input-lg input-form ">
                         <label for="username" class="sr-only">
-                            Nom d'utilisateur
-                        </label>
-                        <input type="text" class="form-control" id="username" name="login" placeholder="Nom d'utilisateur">
+username                        </label>
+                        <input type="text" class="form-control" id="username" name="login" placeholder="username">
                     </div>
                     
                     <div class="form-group input-lg input-form">
-                        <label for="password" class="sr-only">Mot de passe</label>
-                        <input type="password" name="pass" id="password" value="" class="form-control"placeholder="Mot de passe">
+                        <label for="password" class="sr-only">password</label>
+                        <input type="password" name="pass" id="password" value="" class="form-control"placeholder="password">
                     </div>
                     
                     <div class="form-group">
@@ -54,13 +53,13 @@ CSS
                     </div>
 
                     <div class="fh5co-cards">
-                        <a class="float-center" href="inscriptionClient.php">nouveau client ?</a>
+                        <a class="float-center" href="inscriptionClient.php">new client ?</a>
                     </div>
                     <div class="fh5co-cards">
-                        <a class="float-center" href="inscriptionGarage.php">nouveau garage ?</a>
+                        <a class="float-center" href="inscriptionGarage.php">new garage ?</a>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary input-form" id="loginbtn">Connexion</button>
+                    <button type="submit" class="btn btn-primary input-form" id="loginbtn">sign in</button>
 
                 </form>
 HTML

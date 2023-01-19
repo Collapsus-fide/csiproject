@@ -9,7 +9,7 @@ if ($type){
     $page->appendContent(<<<HTML
 
 <form action="creerOffre.php" name="nouvelleOffre" style="margin-top: 100px">
-<input class="btn btn-primary"type="submit" name="Voir" value="Nouvelle Offre">
+<input class="btn btn-primary"type="submit" name="view" value="New offer">
 </form>
  <table>
   <thead>
@@ -17,7 +17,7 @@ if ($type){
         <th colspan="4">car offers</th>
     </tr>
     <tr>
-        <th scope="col">Mise en vente</th>
+        <th scope="col">date</th>
         <th scope="col">Price</th>
         <th scope="col">Brand</th>
         <th scope="col">Model</th>
@@ -36,6 +36,18 @@ if ($type){
 HTML
     );
     foreach ($offres as $offre){
+        $status="";
+        switch ($offre->getStatus()){
+            case "disponible":
+                $status = "available";
+                break;
+            case "vendu":
+                $status="sold";
+                break;
+            case "expirer":
+                $status="expired";
+                break;
+        }
         $page->appendContent(<<<HTML
 <tr>
       <td>{$offre->getDateDepot()}</td>
@@ -48,10 +60,10 @@ HTML
       <td>{$offre->getTypeCarburant()}</td>
       <td>{$offre->getPrixPredit()}</td>
       <td>{$offre->getCategorie()}</td>
-       <td>{$offre->getStatus()}</td>
+       <td>{$status}</td>
       <td><form action="offreVoiture.php" method="post">
       <input type="hidden" name="id" id="id" value="{$offre->getImmatriculation()}">
-    <input class="btn" type="submit" name="upvote" value="Voir" />
+    <input class="btn" type="submit" name="upvote" value="view" />
 </form>
 </td>
 
@@ -73,11 +85,11 @@ HTML
 <table>
   <thead>
     <tr>
-        <th colspan="9">proposition d'achat</th>
+        <th colspan="9">offers</th>
     </tr>
     <tr>
         <th scope="col">Date</th>
-        <th scope="col">montant</th>
+        <th scope="col">value</th>
         <th scope="col"></th>
         <th scope="col"></th>
 
@@ -88,11 +100,23 @@ HTML
     );
 
     foreach ($propositions as $proposition){
+        $status="";
+        switch ($proposition->getStatus()){
+            case "accepter":
+                $status = "accepted";
+                break;
+            case "refuser":
+                $status="refused";
+                break;
+            case "soumis":
+                $status="waiting";
+                break;
+        }
         $page->appendContent(<<<HTML
 <tr>
       <td>{$proposition->getDateProposition()}</td>
       <td>{$proposition->getMontant()}</td>
-        <td>{$proposition->getStatus()}</td>
+        <td>{$status}</td>
 HTML
         );
 

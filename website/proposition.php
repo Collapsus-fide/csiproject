@@ -22,8 +22,9 @@ HTML
     }
 }elseif($_POST["id"] && ($user->isGarage())){
     if($_POST["accepter"] ){
-        PropositionAchat::accepter($_POST["id"] );
+        PropositionAchat::accepter($_POST["id"],intval($_POST["prixFinal"]) );
         header('Location: index.php');
+
     }elseif ($_POST["refuser"]){
         PropositionAchat::refuser($_POST["id"] );
         header('Location: index.php');

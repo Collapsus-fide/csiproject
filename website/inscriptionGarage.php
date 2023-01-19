@@ -7,40 +7,39 @@ if(isset($_POST["inscription"])){
     $page->appendContent(<<<HTML
 <form action="inscriptionClient.php" method="post" name="inscription" style="margin-top: 100px">
 <label>
-Nom d'utilisateur
+username
     <input type="text" name="username">
 </label>
    <label>
-   mot de passe
+password
     <input type="password" name="mdp">
 </label>
 <label>
-email
+mail
     <input type="email" name="email">
 </label>
    <label>
-adresse
+adress
     <input type="text" name="nom">
 </label>
  <label>
-telephone
+phone
     <input type="text" name="tel">
 </label>
 <label>
-Nom du gerant
+manager's lastname
     <input type="text" name="nomGerant">
 </label>
    <label>
-prenom du gerant
-    <input type="text" name="prenomGerant">
+manager's firstname    <input type="text" name="prenomGerant">
 </label>
 <label>
-nom du garage    <input type="text" name="nomGarage">
+garage's name    <input type="text" name="nomGarage">
 </label>
 <label>
 Siret
     <input type="text" name="siret">
-    <input type="submit" name="inscription" value="inscription">
+    <input type="submit" name="inscription" value="sign up">
 </label>
 </form>
 HTML

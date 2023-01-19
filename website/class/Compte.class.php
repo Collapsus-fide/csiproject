@@ -359,18 +359,29 @@ SQL
 public static function signUpRequestClient($username, $mdp, $email, $tel, $adresse, $prenom,$nom){
     $stmt = MyPDO::getInstance();
     $stmt = $stmt->prepare(<<<SQL
-insert into compte(nomutilisateur,motdepasse,email,adresse,tel) VALUES (:nomUtil,:pass,:mail,:adresse,:tel);
+insert into compte(nomutilisateur,motdepasse,email,adresse,tel) VALUES (:username,:mdp,:mail,:adress,:tel);
 SQL
     ) ;
 
     $stmt->execute(array(
         ':username' => $username,
-        ':adresse' => $mdp,
+        ':mdp' => $mdp,
         ':tel' => $tel,
         ':mail' => $email,
-        ':pass'  => $adresse,
-         ':prenom' => $prenom,
-        ':nom' => $nom)) ;
+        ':adress'  => $adresse
+         )) ;
+
+
+    $stmt = $stmt->prepare(<<<SQL
+insert into client(prenom, nom, idcompte) VALUES (:prenom,:nom,:idcompte);
+SQL
+    ) ;
+    $stmt->execute(array(
+        ':prenom'=> $prenom,
+        ':nom' => $nom,
+        ':idcompte'  => MyPDO::getInstance()->lastInsertId()
+
+));
 }
 public function isGarage(){
     $stmt = MyPDO::getInstance();

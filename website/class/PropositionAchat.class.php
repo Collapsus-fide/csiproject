@@ -8,12 +8,21 @@ class PropositionAchat
     protected float $montant;
     protected string $dateproposition;
     protected string $status;
-    protected int $idoffrevoiture;
+    protected ?int $idoffrevoiture;
+    protected ?int $idoffrevoiturearchivage;
+
+    /**
+     * @return int|null
+     */
+    public function getIdoffrevoiturearchivage(): ?int
+    {
+        return $this->idoffrevoiturearchivage;
+    }
 
     /**
      * @return int
      */
-    public function getIdoffrevoiture(): int
+    public function getIdoffrevoiture(): ?int
     {
         return $this->idoffrevoiture;
     }
@@ -83,7 +92,7 @@ class PropositionAchat
     }
 
 
-    public static function getPropByIdOffre(string $id){
+    public static function getPropByIdOffre(int $id){
         $stmt = myPDO::getInstance()->prepare(<<<SQL
     SELECT *
     FROM propositionachat
@@ -122,76 +131,95 @@ SQL
 
     }
 
-    public static function accepter($id, $prixFinal){
+    /**
+     * @throws Exception
+     */
+    public static function accepter($id, int $prixFinal){
         $prop= PropositionAchat::createPropFromId($id);
+        date_default_timezone_set('Europe/Paris');
+        $date = date('Y-m-d', time());
         $offre  = OffreVoiture::createFromId($prop->getIdoffrevoiture());
+        $data = [
+            ':immatriculation' => $offre->getImmatriculation(),
+            ':datedepot' => $offre->getDateDepot(),
+            ':datedevente' => $date,
+            ':prixvente' => $offre->getPrixVente(),
+            ':prixpredit' => $offre->getPrixPredit(),
+            ':prixfinal' => $prop->getMontant(),
+            ':commentaireprix' => $offre->getCommentairePrix(),
+            ':imagev' => $offre->getImageV(),
+            ':marquevehicule' => $offre->getMarqueVehicule(),
+            ':modelvehicule' => $offre->getModelVehicule(),
+            ':anneevehicule' => $offre->getAnneeVehicule(),
+            ':typetransmission' => $offre->getTypeTransmission(),
+            ':mileagevehicule' => $offre->getMileageVehicule(),
+            ':typecarburant' => $offre->getTypeCarburant(),
+            ':taxe' => $offre->getTaxe(),
+            ':autonomie' => $offre->getAutonomie(),
+            ':tailleMoteur' => $offre->getTailleMoteur(),
+            ':idgarage' => $offre->getIdgarage(),
+            ':categ' => $offre->getCategorie()
+        ];
+
+        $stmt = myPDO::getInstance()->prepare(<<<SQL
+     insert into offrevoiturearchivage (immatriculation, datedepot, datedevente, prixvente, prixpredit, prixfinal, commentaireprix, imagev, marquevehicule, modelvehicule, anneevehicule, typetransmission, mileagevehicule, typecarburant, taxe, autonomie, taillemoteur, idgarage, categorie
+     )                          Values (:immatriculation, :datedepot, :datedevente, :prixvente, :prixpredit, :prixfinal, :commentaireprix, :imagev, :marquevehicule, :modelvehicule, :anneevehicule, :typetransmission, :mileagevehicule, :typecarburant, :taxe, :autonomie, :tailleMoteur, :idgarage, :categ )
+
+
+SQL
+        );
+        $stmt->execute($data);
+
+
+        $data = [
+            ':id' => $offre->getIdoffrevoiture(),
+            ':idArchive' => intval(MyPDO::getInstance()->lastInsertId())
+        ];
+        $stmt = myPDO::getInstance()->prepare(<<<SQL
+    Update propositionachat
+    Set status = 'accepter', 
+        idoffrevoiture = null,
+        "idvoffrevoiturearchivage" = :idArchive
+    WHERE idoffrevoiture = :id
+SQL
+        );
+
+        $stmt->execute($data);
+        $data = [
+            ':id' => $id,
+            ':idArchive' => intval(MyPDO::getInstance()->lastInsertId())
+        ];
+        $stmt = myPDO::getInstance()->prepare(<<<SQL
+    Update propositionachat
+    Set status = 'refuser',
+        idoffrevoiture = null,
+        "idvoffrevoiturearchivage" = :idArchive
+    WHERE idoffrevoiture = (select idoffrevoiture from propositionachat where idpropositionachat = :id) AND idpropositionachat != :id
+SQL
+        );
+
+        $stmt->execute($data);
 
         $data = [
             ':id' => $id,
             ':prixFinal' => $prixFinal
         ];
         $stmt = myPDO::getInstance()->prepare(<<<SQL
-    Update propositionachat
-    Set status = 'accepter'
-    WHERE idpropositionachat = :id
-SQL
-        );
-
-        $stmt->execute([$id]);
-
-        $stmt = myPDO::getInstance()->prepare(<<<SQL
-    Update propositionachat
-    Set status = 'refuser'
-    WHERE idoffrevoiture = (select idoffrevoiture from propositionachat where idpropositionachat = :id) AND idpropositionachat != :id
-SQL
-        );
-
-        $stmt->execute([$id]);
-
-
-        $stmt = myPDO::getInstance()->prepare(<<<SQL
     Update offrevoiture
     Set status = 'vendu',
         "dateDeVente" = current_date,
         "prixFinal" = :prixFinal
-    WHERE immatriculation = (select idoffrevoiture from propositionachat where idpropositionachat = :id) 
+    WHERE idoffrevoiture = (select propositionachat.idoffrevoiture from propositionachat where idpropositionachat = :id) 
 SQL
         );
 
         $stmt->execute($data);
-
-        $data = [
-            ':immatriculation' => $offre->getImmatriculation(),
-            ':datedepot' => $offre->getDateDepot(),
-            ':datedevante' => $offre->getDateDeVente(),
-            ':prixvente' => $offre->getPrixVente(),
-            ':prixpredit' => $offre->getPrixPredit(),
-            ':prixfinal' => $offre->getPrixFinal(),
-            ':commentaireprix' => $offre->getCommentairePrix(),
-            ':marquevehicule' => $offre->getMarqueVehicule(),
-            ':modelvehicule' => $offre->getModelVehicule(),
-            ':annevehicule' => $offre->getAnneeVehicule(),
-            ':typetransmission' => $offre->getTypeTransmission(),
-            ':mileagevehicule' => $offre->getMileageVehicule(),
-            ':typecarburant' => $offre->getTypeCarburant(),
-            ':taxe' => $offre->getTaxe(),
-            ':autonomie' => $offre->getAutonomie(),
-            ':tailleMoteur' => $offre->getImmatriculation(),
-            ':idgarage' => $offre->getIdgarage()
-        ];
-
-        $stmt = myPDO::getInstance()->prepare(<<<SQL
-     insert into offrevoiturearchivage (immatriculation, datedepot, datedevente, prixvente, prixpredit, prixfinal, commentaireprix, imagev, marquevehicule, modelvehicule, anneevehicule, typetransmission, mileagevehicule, typecarburant, taxe, autonomie, taillemoteur, idgarage
-     )                          Values (:immatriculation, :datedepot, :datedevente, :prixvente, :prixpredit, :prixfinal, :commentaireprix, :imagev, :marquevehicule, :modelvehicule, :anneevehicule, :typetransmission, :mileagevehicule, :typecarburant, :taxe, :autonomie, :taillemoteur, :idgarage )
-SQL
-        );
-
         $data =[
             ':id'=> $offre->getIdoffrevoiture()
         ];
-        $stmt->execute($data);
+
         $stmt = myPDO::getInstance()->prepare(<<<SQL
-     delete from offrevoiture where  idoffrevoiture = :id
+     delete from offrevoiture where  idoffrevoiture = :id 
      
 SQL
         );
