@@ -27,13 +27,13 @@ class OffreVoiture
     protected string $typeCarburant;
     protected int $idgarage;
 
-    public static function modifier($id, $commentaire, $mileage,$prix)
+    public static function modifier($id, $commentaire, $mileage, $prix)
     {
         $data = [
             ':id' => $id,
             ':mileage' => $mileage,
             ':prix' => $prix,
-            ':commentaire'=> $commentaire
+            ':commentaire' => $commentaire
         ];
         $stmt = MyPDO::getInstance()->prepare(<<<SQL
         update OffreVoiture set "commentairePrix" = :commentaire, "mileageVehicule" = :mileage, "prixVente" = :prix
@@ -102,10 +102,11 @@ SQL
     {
         $this->immatriculation = $immatriculation;
     }
+
     /**
      * @return string
      */
-    public function getDateDepot(): String
+    public function getDateDepot(): string
     {
         return $this->dateDepot;
     }
@@ -113,7 +114,7 @@ SQL
     /**
      * @param DateTime $datedepot
      */
-    public function setDateDepot(String $dateDepot): void
+    public function setDateDepot(string $dateDepot): void
     {
         $this->dateDepot = $dateDepot;
     }
@@ -337,7 +338,7 @@ SQL
     /**
      * @param string $typeCarburant
      */
-    public function setTypeCarburant( string $typeCarburant): void
+    public function setTypeCarburant(string $typeCarburant): void
     {
         $this->typeCarburant = $typeCarburant;
     }
@@ -391,8 +392,7 @@ SQL
     }
 
 
-
-    public static function createFromImmat($id) : self
+    public static function createFromImmat($id): self
     {
         $stmt = myPDO::getInstance()->prepare(<<<SQL
     SELECT *
@@ -407,7 +407,7 @@ SQL
         return $stmt->fetch();
     }
 
-    public static function createFromId($id) : self
+    public static function createFromId($id): self
     {
         $stmt = myPDO::getInstance()->prepare(<<<SQL
     SELECT *
@@ -456,7 +456,6 @@ SQL
     }
 
 
-
     public static function getOffresByIdGarage($id)
     {
         $data = [
@@ -474,7 +473,7 @@ SQL
         return $stmt->fetchAll();
     }
 
-    public static function addOffre(string $immatriculation, float $prixVente, string $marqueVehicule, string $modeleVehicule, string $anneeVehicule, string $typeTransmission, int $mileageVehicule, string $typeCarburant, $taxe, int $autonomie, $tailleMoteur, $prixPredit, $idGarage,$commentaire)
+    public static function addOffre(string $immatriculation, float $prixVente, string $marqueVehicule, string $modeleVehicule, string $anneeVehicule, string $typeTransmission, int $mileageVehicule, string $typeCarburant, $taxe, int $autonomie, $tailleMoteur, $prixPredit, $idGarage, $commentaire)
     {
 
         //todo appel ia pour categ
@@ -494,7 +493,7 @@ SQL
             ':prixPredit' => $prixPredit,
             ':idGarage' => $idGarage,
             ':categ' => $categ,
-            ':commentaire'=> $commentaire
+            ':commentaire' => $commentaire
 
         ];
         $stmt = MyPDO::getInstance()->prepare(<<<SQL
@@ -505,7 +504,8 @@ SQL
 
     }
 
-    public static function getOffresDispo(){
+    public static function getOffresDispo()
+    {
         $stmt = MyPDO::getInstance()->prepare(<<<SQL
             SELECT idoffrevoiture,immatriculation,"dateDepot","marqueVehicule","modelVehicule","anneeVehicule","typeCarburant","typeTransmission","mileageVehicule",autonomie,"tailleMoteur","prixVente",categorie
             FROM OffreVoiture
@@ -517,8 +517,82 @@ SQL
 
         return $stmt->fetchAll();
     }
-public static function definirPrix(string $immatriculation, string $marqueVehicule, string $modeleVehicule, string $anneeVehicule, string $typeTransmission, int $mileageVehicule, string $typeCarburant, $taxe, int $autonomie, $tailleMoteur){
 
-        return 100;
-}
+    public static function definirPrix(string $immatriculation, string $marqueVehicule, string $modeleVehicule, int $anneeVehicule, string $typeTransmission, int $mileageVehicule, string $typeCarburant, float $taxe, int $autonomie, float $tailleMoteur): int
+    {
+
+        $brand = "";
+        switch ($marqueVehicule) {
+            case "Audi";
+                $brand = "brand_audi";
+                break;
+            case "Bmw":
+                $brand = "brand_bmw";
+                break;
+            case "Ford":
+                $brand = "brand_ford";
+                break;
+            case "Mercedes":
+                $brand = "brand_merc";
+                break;
+            case "Toyota":
+                $brand = "brand_toyota";
+                break;
+            case "Vaux Hall":
+                $brand = "brand_vauxhall";
+                break;
+            case "Volkswagen":
+                $brand = "brand_vw";
+                break;
+            default:
+                break;
+        }
+        $auto = 0;
+        $manual = 0;
+        $other1 = 0;
+        $semi = 0;
+
+        switch ($typeTransmission) {
+            case "Automatic":
+                $auto = 1;
+                break;
+            case "Manual":
+                $manual = 1;
+                break;
+            case "Semi-Auto":
+                $semi = 1;
+                break;
+            case "Other.1":
+                $other1 = 1;
+                break;
+
+        }
+        $diesel = 0;
+        $elec = 0;
+        $petrol = 0;
+        $other = 0;
+        $hybrid = 0;
+
+        switch ($typeCarburant) {
+            case "Diesel":
+                $diesel = 1;
+                break;
+            case "Electric":
+                $elec = 1;
+                break;
+            case "Hybrid":
+                $hybrid = 1;
+                break;
+            case "Petrol":
+                $petrol = 1;
+                break;
+            case " Other";
+                $other = 1;
+                break;
+
+
+        }
+        $cmd = escapeshellcmd('python3 ../IA/mainID3.py load '.$brand.' '. $diesel.' '.$elec.' '.$petrol.' '.$other.' '.$hybrid.' '.$auto.' '.$manual.' '.$other1.' '.$semi.' '.$anneeVehicule.' '.$mileageVehicule.' '.$taxe.' '.$autonomie.' '.$tailleMoteur);
+       return shell_exec($cmd);
+    }
 }

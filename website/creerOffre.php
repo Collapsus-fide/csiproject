@@ -3,7 +3,7 @@ include_once "templates/imports.php";
 include_once "class/OffreVoiture.class.php";
 if($type) {
     if(isset($_POST["prediction"])) {
-        $prixPredit = OffreVoiture::definirPrix($_POST["immatriculation"], $_POST["marque"], $_POST["model"], $_POST["annee"], $_POST["transmission"], intval($_POST["mileage"]), $_POST["carburant"], $_POST["taxe"], $_POST["autonomie"], $_POST["tailleMoteur"]);
+        $prixPredit = OffreVoiture::definirPrix($_POST["immatriculation"], $_POST["marque"], $_POST["model"], $_POST["annee"], $_POST["transmission"], intval($_POST["mileage"]), $_POST["carburant"], $_POST["taxe"], intval($_POST["autonomie"]), $_POST["tailleMoteur"]);
         $page->appendContent(<<<HTML
         <form action="creerOffre.php" method="post" name="nouvelleOffre" style="margin-top: 100px" >
         <input type="hidden" name="immatriculation" value="{$_POST["immatriculation"]}">
@@ -21,12 +21,12 @@ if($type) {
         <input type="hidden" name="idGarage" value="{$user->idcompte}">
 
 <label>
-prix de vente
+price
  <input type="number" name="prixVente" value="{$prixPredit}">
 </label>
 <label>
-commentaire
- <input type="text" name="commentaire" value="{$prixPredit}">
+comment
+ <input type="text" name="commentaire" placeholder="Comment">
 </label>
        
         <input class="btn btn-primary"type="submit" name="creerOffre" value="deposer offre">
@@ -69,7 +69,7 @@ année
 </label>
 
 <label> 
-  <input name="transmission" type="radio" value="Semi-auto">
+  <input name="transmission" type="radio" value="Semi-Auto">
             Semi-auto
 </label>
 <label> 

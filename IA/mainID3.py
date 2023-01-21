@@ -140,7 +140,8 @@ def printTree(arbre):
     print("Node,")
     print(" Feature : " + str(arbre.feature))
     print(" Thershold : " + str(arbre.threshold))
-    printTree(arbre.left)
+
+    print(printTree(arbre.left))
     printTree(arbre.right)
     return
 
@@ -161,22 +162,22 @@ class InternalNode:
         self.left = left
         self.right = right
 
-def getVehicleFromData(brand, diesel, electric, petrol, other, hybrid, automatic, manual, otherTr, SemiAuto, year, price, mileage, tax, mpg, engineSize):    #Sauvegarder un véhicule
+def getVehicleFromData(brand, diesel, electric, petrol, other, hybrid, automatic, manual, otherTr, SemiAuto, year, mileage, tax, mpg, engineSize):    #Sauvegarder un véhicule
     match brand:
         case "brand_audi":
-            return pd.DataFrame(np.array([[1,0,0,0,0,0,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,price,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","price","mileage","tax","mpg","engineSize"])
+            return pd.DataFrame(np.array([[1,0,0,0,0,0,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"])
         case "brand_bmw":
-            return pd.DataFrame(np.array([[0,1,0,0,0,0,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,price,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","price","mileage","tax","mpg","engineSize"])
+            return pd.DataFrame(np.array([[0,1,0,0,0,0,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"])
         case "brand_ford":
-            return pd.DataFrame(np.array([[0,0,1,0,0,0,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,price,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","price","mileage","tax","mpg","engineSize"])
+            return pd.DataFrame(np.array([[0,0,1,0,0,0,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"])
         case "brand_merc":
-            return pd.DataFrame(np.array([[0,0,0,1,0,0,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,price,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","price","mileage","tax","mpg","engineSize"])
+            return pd.DataFrame(np.array([[0,0,0,1,0,0,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"])
         case "brand_toyota":
-            return pd.DataFrame(np.array([[0,0,0,0,1,0,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,price,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","price","mileage","tax","mpg","engineSize"])
+            return pd.DataFrame(np.array([[0,0,0,0,1,0,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"])
         case "brand_vauxhall":
-            return pd.DataFrame(np.array([[0,0,0,0,0,1,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,price,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","price","mileage","tax","mpg","engineSize"])
+            return pd.DataFrame(np.array([[0,0,0,0,0,1,0,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"])
         case "brand_vw":
-            return pd.DataFrame(np.array([[0,0,0,0,0,0,1,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,price,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","price","mileage","tax","mpg","engineSize"])
+            return pd.DataFrame(np.array([[0,0,0,0,0,0,1,diesel,electric,hybrid,other,petrol,automatic,manual,otherTr,SemiAuto,year,mileage,tax,mpg,engineSize]]), columns=["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"])
 
 def saveVehicle(fileName, vehicule):    #Sauvegarder un véhicule (unused)
     file = open(fileName, 'wb')
@@ -188,7 +189,7 @@ print ('Number of arguments:', len(sys.argv), 'arguments.')
 if (len(sys.argv) < 2):
     print ('Wrong amount of arguments, at least 2 needed')
     sys.exit()
-elif (len(sys.argv) > 18):
+elif (len(sys.argv) > 17):
     print ('Too much arguments')
     sys.exit()
 else: 
@@ -207,10 +208,16 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None):
 train = data.sample(frac=0.8, random_state=1)
 test = data.loc[~data.index.isin(train.index)]
 
+#FILTRAGE DES COLONNES
+labels_train = train ["price"]
+labels_test = test ["price"]
+train = train [["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"]]
+test  = test  [["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"]]
+
 # Sauvegarde véhicules à tester (depuis le site)
 if (len(sys.argv) >= 3): 
-    if (len(sys.argv) == 18):
-        test = getVehicleFromData(str(sys.argv[2]), str(sys.argv[3]), str(sys.argv[4]), str(sys.argv[5]), str(sys.argv[6]), str(sys.argv[7]), str(sys.argv[8]), str(sys.argv[9]), str(sys.argv[10]), str(sys.argv[11]), str(sys.argv[12]), str(sys.argv[13]), str(sys.argv[14]), str(sys.argv[15]), str(sys.argv[16]), str(sys.argv[17]))
+    if (len(sys.argv) == 17):
+        test = getVehicleFromData(str(sys.argv[2]), str(sys.argv[3]), str(sys.argv[4]), str(sys.argv[5]), str(sys.argv[6]), str(sys.argv[7]), str(sys.argv[8]), str(sys.argv[9]), str(sys.argv[10]), str(sys.argv[11]), str(sys.argv[12]), str(sys.argv[13]), str(sys.argv[14]), str(sys.argv[15]), str(sys.argv[16]))
         test = test.astype(float)
     else:
         print("Erreur, arguments manquants")
@@ -232,12 +239,6 @@ if (len(sys.argv) >= 3):
 
 print("Test1")
 print(test)
-
-#FILTRAGE DES COLONNES
-labels_train = train ["price"]
-labels_test = test ["price"]
-train = train [["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"]]
-test  = test  [["brand_audi","brand_bmw","brand_ford","brand_merc","brand_toyota","brand_vauxhall","brand_vw","Diesel","Electric","Hybrid","Other","Petrol","Automatic","Manual","Other.1","Semi-Auto","year","mileage","tax","mpg","engineSize"]]
 
 labels_train = labels_train.values
 print(f'Average Values : {sum(labels_train)/len(labels_train)}')
@@ -276,3 +277,4 @@ print(f'precision : {precision:.2f}')
 predictions = id3.predict(X_test)
 print(f'Prediction : {predictions}')
 print(f'Average Prediction : {sum(predictions)/len(predictions)}')
+print(predictions[0])
