@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from collections import Counter
 import numpy as np
 import pandas as pd

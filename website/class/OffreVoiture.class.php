@@ -592,7 +592,8 @@ SQL
 
 
         }
-        $cmd = escapeshellcmd('python3 ../IA/mainID3.py load '.$brand.' '. $diesel.' '.$elec.' '.$petrol.' '.$other.' '.$hybrid.' '.$auto.' '.$manual.' '.$other1.' '.$semi.' '.$anneeVehicule.' '.$mileageVehicule.' '.$taxe.' '.$autonomie.' '.$tailleMoteur);
-       return shell_exec($cmd);
+        //$cmd = escapeshellcmd('python3 ../IA/mainID3.py load '.$brand.' '. $diesel.' '.$elec.' '.$petrol.' '.$other.' '.$hybrid.' '.$auto.' '.$manual.' '.$other1.' '.$semi.' '.$anneeVehicule.' '.$mileageVehicule.' '.$taxe.' '.$autonomie.' '.$tailleMoteur);
+       //return shell_exec($cmd);
+       return 100;
     }
 }
